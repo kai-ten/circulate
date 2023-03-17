@@ -12,6 +12,7 @@ This means that nodes and edges can be added over time as more data is gathered 
 
 - Docker (e.g. [Rancher Desktop](https://rancherdesktop.io/))
 - [ArangoDB Docker](https://hub.docker.com/_/arangodb )
+- Golang (see go.mod for current version we are on)
 
 <br />
 
