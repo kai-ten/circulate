@@ -27,8 +27,8 @@ This means that nodes and edges can be added over time as more data is gathered 
         -v /arangodb/logs/:/var/log/arangodb3 \
         --restart always \
         --name arangodb \
-        -d arangodb:latest \
-        --log.level warning
+        arangodb:latest \
+        --log.level debug
     ```
 
 1. Navigate to localhost:8529 in your browser to check out your new database
@@ -48,7 +48,7 @@ This means that nodes and edges can be added over time as more data is gathered 
         -e DB_ENDPOINT="tcp://172.17.0.2:8529" \
         -e ROOT_PASSWORD="password" \
         -e CA_CERT="" \
-        -p 9000:8080 adb_configurator:latest /main \
+        -p 9000:8080 adb_configurator:latest /main
     ```
 
 
