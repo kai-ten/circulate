@@ -7,10 +7,27 @@ import (
 	"github.com/aws/aws-lambda-go/lambda"
 )
 
+type Edge struct {
+	Name string
+	From []string
+	To   []string
+}
+
 var adbClient = *AdbConnect()
 var databaseName = "circulate"
 var vertexCollections = [...]string{
 	"malware", "reporter", "threatActor", "ioc", "threatSource",
+}
+var edgeCollections = [...]Edge{
+	{Name: "shared", From: []string{"threatSource"}, To: []string{"ioc"}},
+	{Name: "reported_to", From: []string{"reporter"}, To: []string{"threatSource"}},
+	{Name: "reported_by", From: []string{"ioc"}, To: []string{"reporter"}},
+	{Name: "came_from", From: []string{"ioc"}, To: []string{"threatSource"}},
+	{Name: "found", From: []string{"reporter"}, To: []string{"ioc"}},
+	{Name: "found_by", From: []string{"ioc"}, To: []string{"reporter"}},
+	{Name: "identified", From: []string{"reporter"}, To: []string{"malware"}},
+	{Name: "identified_by", From: []string{"malware"}, To: []string{"reporter"}},
+	{Name: "associates_with", From: []string{"malware", "ioc"}, To: []string{"ioc", "malware"}},
 }
 
 func HandleRequest() {
@@ -20,20 +37,14 @@ func HandleRequest() {
 	// Create the graph to link the vertices and edges
 	g := ensureGraph(context.TODO(), db, "graph", nil)
 
-	// Create edge collections
-	ensureEdgeCollection(context.TODO(), g, "shared", []string{"threatSource"}, []string{"ioc"})
-	ensureEdgeCollection(context.TODO(), g, "reported_to", []string{"reporter"}, []string{"threatSource"})
-	ensureEdgeCollection(context.TODO(), g, "reported_by", []string{"ioc"}, []string{"reporter"})
-	ensureEdgeCollection(context.TODO(), g, "came_from", []string{"ioc"}, []string{"threatSource"})
-	ensureEdgeCollection(context.TODO(), g, "found", []string{"reporter"}, []string{"ioc"})
-	ensureEdgeCollection(context.TODO(), g, "found_by", []string{"ioc"}, []string{"reporter"})
-	ensureEdgeCollection(context.TODO(), g, "identified", []string{"reporter"}, []string{"malware"})
-	ensureEdgeCollection(context.TODO(), g, "identified_by", []string{"malware"}, []string{"reporter"})
-	ensureEdgeCollection(context.TODO(), g, "associates_with", []string{"malware", "ioc"}, []string{"ioc", "malware"})
-
 	// Create vertex collections
 	for _, vertex := range vertexCollections {
 		ensureCollection(context.TODO(), db, vertex)
+	}
+
+	// Create edge collections
+	for _, edge := range edgeCollections {
+		ensureEdgeCollection(context.TODO(), g, edge.Name, edge.From, edge.To)
 	}
 
 	log.Println("Database, graph, and collections have been created. Check out your ArangoDB :)")

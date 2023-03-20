@@ -41,7 +41,6 @@ This means that nodes and edges can be added over time as more data is gathered 
     docker build . -t adb_configurator:latest
     ```
 
-
 1. Run the docker container locally: <br />
     ```
     docker run \
@@ -50,7 +49,6 @@ This means that nodes and edges can be added over time as more data is gathered 
         -e CA_CERT="" \
         -p 9000:8080 adb_configurator:latest /main
     ```
-
 
 1. Trigger the lambda from another terminal: <br />
     ```
