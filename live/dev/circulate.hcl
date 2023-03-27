@@ -32,7 +32,7 @@ inputs = {
         src_path = "${get_repo_root()}/lib/targets/postgres/"
       }
     ]
-  }
+}
 
   unions = {
     okta_users_s3 = [

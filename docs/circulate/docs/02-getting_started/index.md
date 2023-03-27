@@ -1,4 +1,0 @@
----
-id: Getting Started
----
-

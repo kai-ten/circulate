@@ -35,7 +35,7 @@ func HandleRequest() {
 	db := ensureDatabase(context.TODO(), databaseName, nil)
 
 	// Create the graph to link the vertices and edges
-	g := ensureGraph(context.TODO(), db, "graph", nil)
+	g := ensureGraph(context.TODO(), db, "threat_graph", nil)
 
 	// Create vertex collections
 	for _, vertex := range vertexCollections {

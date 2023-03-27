@@ -1,6 +1,6 @@
 .vscode
-inspiration.md
 .terragrunt-cache
+.DS_STORE
 
 
 # Local .terraform directories
